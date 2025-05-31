@@ -61,12 +61,14 @@ public class TempBanCommand implements CommandExecutor {
         Punishment punishment = new Punishment(PunishmentType.TEMP_BAN, playerUUID, reason, expiry);
         plugin.getPunishmentDB().addPunishment(playerUUID, punishment);
 
-        target.ban(reason, new Date(expiry), null);
-
-        // TODO: Test this and see how the tempban works - MAKE MESSAGE CONFIGURABLE
         if (target.isOnline() && target.getPlayer() != null) {
-            target.getPlayer().kickPlayer(reason + "\n\n§7You are banned until: §f" + new Date(expiry));
+            target.getPlayer().kickPlayer(StringUtils.colorize(plugin.getConfig().getString(
+                    "Messages.Temp-Ban-Display", "You are temporarily banned until <time> for <reason>")
+                    .replace("<time>", new Date(expiry) + "")
+                    .replace("<reason>", reason)));
         }
+
+        target.ban(reason, new Date(expiry), null);
 
         sender.sendMessage(StringUtils.colorize(plugin.getConfig().getString(
                 "Messages.Temp-Banned", "You have temp-banned <player> for <time>")

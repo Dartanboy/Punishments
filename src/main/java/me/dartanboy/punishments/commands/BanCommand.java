@@ -53,11 +53,13 @@ public class BanCommand implements CommandExecutor {
         Punishment punishment = new Punishment(PunishmentType.BAN, playerUUID, reason, expiry);
         plugin.getPunishmentDB().addPunishment(playerUUID, punishment);
 
-        target.ban(reason, (Date) null, null);
-
         if (target.isOnline() && target.getPlayer() != null) {
-            target.getPlayer().kickPlayer(reason);
+            target.getPlayer().kickPlayer(StringUtils.colorize(plugin.getConfig().getString(
+                    "Messages.Ban-Display", "You have been permanently banned for <reason>")
+                    .replace("<reason>", reason)));
         }
+
+        target.ban(reason, (Date) null, null);
 
         sender.sendMessage(StringUtils.colorize(plugin.getConfig().getString(
                 "Messages.Banned", "You have banned <player>!").replace("<player>", args[0])));
