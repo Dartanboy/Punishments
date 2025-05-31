@@ -5,5 +5,6 @@ Messages:
   Ban-Display: '&cYou have been permanently banned for &6<reason>'
   Temp-Banned: '&aYou have &6temp-banned &a<player> for <time>'
   Temp-Ban-Display: '&cYou are temporarily banned until &6<time> &cfor &6<reason>'
+  Muted: '&aYou have &6muted &a<player>'
   No-Permission: '&cInsufficient permissions.'
   Invalid-Duration: '&cInvalid duration! Use formats like 1d, 2h30m, etc.'

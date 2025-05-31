@@ -9,6 +9,7 @@ public class Punishment {
     private final UUID punishmentId;
     private final String reason;
     private final long expiryTime;
+    private boolean active;
 
     public Punishment(PunishmentType punishmentType, UUID playerUUID, String reason, long expiryTime) {
         this.punishmentType = punishmentType;
@@ -16,6 +17,7 @@ public class Punishment {
         this.reason = reason;
         this.expiryTime = expiryTime;
         this.punishmentId = UUID.randomUUID();
+        this.active = true;
     }
 
     public PunishmentType getPunishmentType() {
@@ -36,5 +38,13 @@ public class Punishment {
 
     public UUID getPunishmentId() {
         return punishmentId;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 }

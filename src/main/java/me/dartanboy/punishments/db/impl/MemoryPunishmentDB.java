@@ -24,9 +24,14 @@ public class MemoryPunishmentDB implements PunishmentDB {
     }
 
     @Override
-    public void deletePunishment(UUID punishmentId) {
+    public void removePunishment(UUID punishmentId) {
         for (List<Punishment> list : punishments.values()) {
-            list.removeIf(p -> p.getPunishmentId().equals(punishmentId));
+            for (int i = 0; i < list.size(); i++) {
+                Punishment punishment = list.get(i);
+                list.remove(punishment);
+                punishment.setActive(false);
+                list.add(punishment);
+            }
         }
     }
 }

@@ -11,5 +11,5 @@ public interface PunishmentDB {
 
     void addPunishment(UUID playerUUID, Punishment punishment);
 
-    void deletePunishment(UUID punishmentId);
+    void removePunishment(UUID punishmentId);
 }
