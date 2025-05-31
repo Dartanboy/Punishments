@@ -1,0 +1,7 @@
+Messages:
+  Incorrect-Args: '&cIncorrect args! Try &a<suggestion>'
+  Never-Joined: '&c<player> has never joined before! You cannot punish them!'
+  Banned: '&aYou have &6banned &a<player>'
+  Temp-Banned: '&aYou have &6temp-banned &a<player> for <time>'
+  No-Permission: '&cInsufficient permissions.'
+  Invalid-Duration: '&cInvalid duration! Use formats like 1d, 2h30m, etc.'

@@ -1,0 +1,12 @@
+name: Punishments
+api-version: 1.21
+version: ${project.version}
+author: Dartanboy
+main: me.dartanboy.punishments.Punishments
+commands:
+  ban:
+    description: Ban a player permanently
+    usage: /<command>
+  tempban:
+    description: Ban a player temporarily
+    usage: /<command>
