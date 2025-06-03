@@ -12,4 +12,8 @@ public interface PunishmentDB {
     void addPunishment(UUID playerUUID, Punishment punishment);
 
     void removePunishment(UUID punishmentId);
+
+    void registerIp(UUID playerUUID, String ip);
+
+    String getIp(UUID playerUUID);
 }

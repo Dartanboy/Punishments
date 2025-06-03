@@ -15,34 +15,33 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
-public class TempBanCommand implements CommandExecutor {
+public class TempMuteCommand implements CommandExecutor {
 
     private final Punishments plugin;
 
-    public TempBanCommand(Punishments plugin) {
+    public TempMuteCommand(Punishments plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("punishments.tempban")) {
+        if (!sender.hasPermission("punishments.tempmute")) {
             sender.sendMessage(StringUtils.colorize(plugin.getConfig().getString(
-                    "Messages.No-Permission", "Insufficient permissions")));
+                    "Messages.No-Permission", "Insufficient permissions.")));
             return true;
         }
 
         if (args.length < 3) {
             sender.sendMessage(StringUtils.colorize(plugin.getConfig().getString(
                             "Messages.Incorrect-Args", "Incorrect args! Try <suggestion>")
-                    .replace("<suggestion>", "/tempban <player> <duration> <reason>")));
+                    .replace("<suggestion>", "/tempmute <player> <duration> <reason>")));
             return true;
         }
 
         OfflinePlayer target = OfflineUtils.getOfflinePlayerIfCached(args[0]);
-
         if (target == null) {
             sender.sendMessage(StringUtils.colorize(plugin.getConfig().getString(
-                    "Messages.Never-Joined", "<player> has never joined").replace("<player>", args[0])));
+                    "Messages.Never-Joined", "<player> has never joined!").replace("<player>", args[0])));
             return true;
         }
 
@@ -58,18 +57,11 @@ public class TempBanCommand implements CommandExecutor {
         reason = StringUtils.colorize(reason);
         long expiry = System.currentTimeMillis() + durationMillis;
 
-        Punishment punishment = new Punishment(PunishmentType.TEMP_BAN, playerUUID, reason, expiry);
+        Punishment punishment = new Punishment(PunishmentType.TEMP_MUTE, playerUUID, reason, expiry);
         plugin.getPunishmentDB().addPunishment(playerUUID, punishment);
 
-        if (target.isOnline() && target.getPlayer() != null) {
-            target.getPlayer().kickPlayer(StringUtils.colorize(plugin.getConfig().getString(
-                    "Messages.Temp-Ban-Display", "You are temporarily banned until <time> for <reason>")
-                    .replace("<time>", new Date(expiry) + "")
-                    .replace("<reason>", reason)));
-        }
-
         sender.sendMessage(StringUtils.colorize(plugin.getConfig().getString(
-                "Messages.Temp-Banned", "You have temp-banned <player> for <time>")
+                        "Messages.Temp-Muted", "You have temp-muted <player> for <time>!")
                 .replace("<player>", args[0])
                 .replace("<time>", args[1])));
         return true;

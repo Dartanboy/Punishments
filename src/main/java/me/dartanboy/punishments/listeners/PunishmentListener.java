@@ -4,10 +4,14 @@ import me.dartanboy.punishments.Punishments;
 import me.dartanboy.punishments.punishments.Punishment;
 import me.dartanboy.punishments.punishments.PunishmentType;
 import me.dartanboy.punishments.utils.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.net.InetAddress;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -47,6 +51,31 @@ public class PunishmentListener implements Listener {
                     "Messages.Mute-Display", "You are muted for <reason> until <time>!")
                     .replace("<reason>", result.reason)
                     .replace("<time>", result.expiry + "")));
+        }
+    }
+
+    @EventHandler
+    public void onPreLogin(AsyncPlayerPreLoginEvent event) {
+        UUID uuid = event.getUniqueId();
+        String playerIp = event.getAddress().getHostAddress();
+        plugin.getPunishmentDB().registerIp(uuid, playerIp);
+
+        List<Punishment> punishments = plugin.getPunishmentDB().getPunishments(uuid);
+        for (Punishment punishment : punishments) {
+            if (punishment.getPunishmentType() == PunishmentType.BAN && punishment.isActive()) {
+                event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
+                event.setKickMessage(StringUtils.colorize(plugin.getConfig().getString(
+                                "Messages.Ban-Display", "You have been banned for <reason>")
+                        .replace("<reason>", punishment.getReason())));
+            }
+            if (punishment.getPunishmentType() == PunishmentType.TEMP_BAN &&
+                            punishment.getExpiryTime() <= System.currentTimeMillis() &&
+                            punishment.isActive()
+            ) {
+                event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
+                // TODO: Temp-Ban Message
+                event.setKickMessage("You are temp-banned (TODO)");
+            }
         }
     }
 }

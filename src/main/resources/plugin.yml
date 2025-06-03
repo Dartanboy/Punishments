@@ -10,3 +10,15 @@ commands:
   tempban:
     description: Ban a player temporarily
     usage: /<command>
+  mute:
+    description: Mute a player permanently
+    usage: /<command>
+  tempmute:
+    description: Mute a player temporarily
+    usage: /<command>
+  kick:
+    description: Kick a player
+    usage: /<command>
+  banip:
+    description: Ban a player and their IP permanently
+    usage: /<command>
