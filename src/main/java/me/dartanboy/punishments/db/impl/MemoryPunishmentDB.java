@@ -11,7 +11,8 @@ import java.util.HashMap;
 public class MemoryPunishmentDB implements PunishmentDB {
 
     private final Map<UUID, List<Punishment>> punishments = new HashMap<>();
-    private final Map<UUID, String> ips = new HashMap<>();
+    private final Map<UUID, List<String>> ipMap = new HashMap<>();
+    private final List<String> bannedIps = new ArrayList<>();
 
     @Override
     public List<Punishment> getPunishments(UUID playerUUID) {
@@ -23,6 +24,21 @@ public class MemoryPunishmentDB implements PunishmentDB {
         List<Punishment> punishmentList = getPunishments(playerUUID);
         punishmentList.add(punishment);
         punishments.put(playerUUID, punishmentList);
+    }
+
+    @Override
+    public boolean isBanned(String ip) {
+        return bannedIps.contains(ip);
+    }
+
+    @Override
+    public void banIp(String ip) {
+        bannedIps.add(ip);
+    }
+
+    @Override
+    public void unbanIp(String ip) {
+        bannedIps.remove(ip);
     }
 
     @Override
@@ -39,11 +55,13 @@ public class MemoryPunishmentDB implements PunishmentDB {
 
     @Override
     public void registerIp(UUID playerUUID, String ip) {
-        ips.put(playerUUID, ip);
+        List<String> ipList = ipMap.getOrDefault(playerUUID, new ArrayList<>());
+        ipList.add(ip);
+        ipMap.put(playerUUID, ipList);
     }
 
     @Override
-    public String getIp(UUID playerUUID) {
-        return ips.getOrDefault(playerUUID, null);
+    public List<String> getIps(UUID playerUUID) {
+        return ipMap.getOrDefault(playerUUID, null);
     }
 }

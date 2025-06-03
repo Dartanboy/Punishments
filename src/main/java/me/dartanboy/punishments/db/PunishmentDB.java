@@ -11,9 +11,15 @@ public interface PunishmentDB {
 
     void addPunishment(UUID playerUUID, Punishment punishment);
 
+    boolean isBanned(String ip);
+
+    void banIp(String ip);
+
+    void unbanIp(String ip);
+
     void removePunishment(UUID punishmentId);
 
     void registerIp(UUID playerUUID, String ip);
 
-    String getIp(UUID playerUUID);
+    List<String> getIps(UUID playerUUID);
 }
