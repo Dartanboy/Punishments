@@ -72,6 +72,6 @@ public class MemoryPunishmentDB implements PunishmentDB {
 
     @Override
     public List<String> getIps(UUID playerUUID) {
-        return ipMap.getOrDefault(playerUUID, null);
+        return ipMap.getOrDefault(playerUUID, new ArrayList<>());
     }
 }
