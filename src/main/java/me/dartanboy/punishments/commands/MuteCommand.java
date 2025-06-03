@@ -1,6 +1,7 @@
 package me.dartanboy.punishments.commands;
 
 import me.dartanboy.punishments.Punishments;
+import me.dartanboy.punishments.commands.base.BaseCommand;
 import me.dartanboy.punishments.punishments.Punishment;
 import me.dartanboy.punishments.punishments.PunishmentType;
 import me.dartanboy.punishments.utils.OfflineUtils;
@@ -13,29 +14,14 @@ import org.bukkit.command.CommandSender;
 import java.util.Arrays;
 import java.util.UUID;
 
-public class MuteCommand implements CommandExecutor {
-
-    private final Punishments plugin;
+public class MuteCommand extends BaseCommand implements CommandExecutor {
 
     public MuteCommand(Punishments plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("punishments.mute")) {
-            sender.sendMessage(StringUtils.colorize(plugin.getConfig().getString(
-                    "Messages.No-Permission", "Insufficient permissions.")));
-            return true;
-        }
-
-        if (args.length < 2) {
-            sender.sendMessage(StringUtils.colorize(plugin.getConfig().getString(
-                            "Messages.Incorrect-Args", "Incorrect args! Try <suggestion>")
-                    .replace("<suggestion>", "/mute <player> <reason>")));
-            return true;
-        }
-
+    public boolean execute(CommandSender sender, Command command, String label, String[] args) {
         OfflinePlayer target = OfflineUtils.getOfflinePlayerIfCached(args[0]);
 
         if (target == null) {
@@ -54,5 +40,10 @@ public class MuteCommand implements CommandExecutor {
         sender.sendMessage(StringUtils.colorize(plugin.getConfig().getString(
                 "Messages.Muted", "You have muted <player>!").replace("<player>", args[0])));
         return true;
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        return execute(sender, command, label, args, "punishments.mute", 2, "/mute <player> <reason>");
     }
 }

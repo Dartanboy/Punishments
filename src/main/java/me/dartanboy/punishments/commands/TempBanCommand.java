@@ -1,6 +1,7 @@
 package me.dartanboy.punishments.commands;
 
 import me.dartanboy.punishments.Punishments;
+import me.dartanboy.punishments.commands.base.BaseCommand;
 import me.dartanboy.punishments.punishments.Punishment;
 import me.dartanboy.punishments.punishments.PunishmentType;
 import me.dartanboy.punishments.utils.OfflineUtils;
@@ -15,29 +16,14 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
-public class TempBanCommand implements CommandExecutor {
-
-    private final Punishments plugin;
+public class TempBanCommand extends BaseCommand implements CommandExecutor {
 
     public TempBanCommand(Punishments plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("punishments.tempban")) {
-            sender.sendMessage(StringUtils.colorize(plugin.getConfig().getString(
-                    "Messages.No-Permission", "Insufficient permissions")));
-            return true;
-        }
-
-        if (args.length < 3) {
-            sender.sendMessage(StringUtils.colorize(plugin.getConfig().getString(
-                            "Messages.Incorrect-Args", "Incorrect args! Try <suggestion>")
-                    .replace("<suggestion>", "/tempban <player> <duration> <reason>")));
-            return true;
-        }
-
+    public boolean execute(CommandSender sender, Command command, String label, String[] args) {
         OfflinePlayer target = OfflineUtils.getOfflinePlayerIfCached(args[0]);
 
         if (target == null) {
@@ -63,15 +49,20 @@ public class TempBanCommand implements CommandExecutor {
 
         if (target.isOnline() && target.getPlayer() != null) {
             target.getPlayer().kickPlayer(StringUtils.colorize(plugin.getConfig().getString(
-                    "Messages.Temp-Ban-Display", "You are temporarily banned until <time> for <reason>")
+                            "Messages.Temp-Ban-Display", "You are temporarily banned until <time> for <reason>")
                     .replace("<time>", new Date(expiry) + "")
                     .replace("<reason>", reason)));
         }
 
         sender.sendMessage(StringUtils.colorize(plugin.getConfig().getString(
-                "Messages.Temp-Banned", "You have temp-banned <player> for <time>")
+                        "Messages.Temp-Banned", "You have temp-banned <player> for <time>")
                 .replace("<player>", args[0])
                 .replace("<time>", args[1])));
         return true;
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        return execute(sender, command, label, args, "punishments.tempban", 3, "/tempban <player> <time> <reason>");
     }
 }

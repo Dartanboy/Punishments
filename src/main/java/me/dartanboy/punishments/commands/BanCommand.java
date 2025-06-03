@@ -1,6 +1,7 @@
 package me.dartanboy.punishments.commands;
 
 import me.dartanboy.punishments.Punishments;
+import me.dartanboy.punishments.commands.base.BaseCommand;
 import me.dartanboy.punishments.punishments.Punishment;
 import me.dartanboy.punishments.punishments.PunishmentType;
 import me.dartanboy.punishments.utils.OfflineUtils;
@@ -13,29 +14,14 @@ import org.bukkit.command.CommandSender;
 import java.util.Arrays;
 import java.util.UUID;
 
-public class BanCommand implements CommandExecutor {
-
-    private final Punishments plugin;
+public class BanCommand extends BaseCommand implements CommandExecutor {
 
     public BanCommand(Punishments plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("punishments.ban")) {
-            sender.sendMessage(StringUtils.colorize(plugin.getConfig().getString(
-                    "Messages.No-Permission", "Insufficient permissions")));
-            return true;
-        }
-
-        if (args.length < 2) {
-            sender.sendMessage(StringUtils.colorize(plugin.getConfig().getString(
-                    "Messages.Incorrect-Args", "Incorrect args! Try <suggestion>")
-                    .replace("<suggestion>", "/ban <player> <reason>")));
-            return true;
-        }
-
+    protected boolean execute(CommandSender sender, Command command, String label, String[] args) {
         OfflinePlayer target = OfflineUtils.getOfflinePlayerIfCached(args[0]);
 
         if (target == null) {
@@ -54,12 +40,17 @@ public class BanCommand implements CommandExecutor {
 
         if (target.isOnline() && target.getPlayer() != null) {
             target.getPlayer().kickPlayer(StringUtils.colorize(plugin.getConfig().getString(
-                    "Messages.Ban-Display", "You have been permanently banned for <reason>")
+                            "Messages.Ban-Display", "You have been permanently banned for <reason>")
                     .replace("<reason>", reason)));
         }
 
         sender.sendMessage(StringUtils.colorize(plugin.getConfig().getString(
                 "Messages.Banned", "You have banned <player>").replace("<player>", args[0])));
         return true;
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        return execute(sender, command, label, args, "punishments.ban", 2, "/ban <player> <reason>");
     }
 }

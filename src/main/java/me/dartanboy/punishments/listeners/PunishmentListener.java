@@ -69,12 +69,15 @@ public class PunishmentListener implements Listener {
                         .replace("<reason>", punishment.getReason())));
             }
             if (punishment.getPunishmentType() == PunishmentType.TEMP_BAN &&
-                            punishment.getExpiryTime() <= System.currentTimeMillis() &&
+                            punishment.getExpiryTime() >= System.currentTimeMillis() &&
                             punishment.isActive()
             ) {
                 event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
-                // TODO: Temp-Ban Message
-                event.setKickMessage("You are temp-banned (TODO)");
+                Date expiryDate = new Date(punishment.getExpiryTime());
+                event.setKickMessage(StringUtils.colorize(plugin.getConfig().getString(
+                                "Messages.Ban-Display", "You have been temp-banned until <time> for <reason>")
+                        .replace("<reason>", punishment.getReason())
+                        .replace("<time>", expiryDate + "")));
             }
         }
     }

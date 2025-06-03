@@ -1,6 +1,7 @@
 package me.dartanboy.punishments.commands;
 
 import me.dartanboy.punishments.Punishments;
+import me.dartanboy.punishments.commands.base.BaseCommand;
 import me.dartanboy.punishments.punishments.Punishment;
 import me.dartanboy.punishments.punishments.PunishmentType;
 import me.dartanboy.punishments.utils.OfflineUtils;
@@ -12,32 +13,16 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.UUID;
 
-public class TempMuteCommand implements CommandExecutor {
-
-    private final Punishments plugin;
+public class TempMuteCommand extends BaseCommand implements CommandExecutor {
 
     public TempMuteCommand(Punishments plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("punishments.tempmute")) {
-            sender.sendMessage(StringUtils.colorize(plugin.getConfig().getString(
-                    "Messages.No-Permission", "Insufficient permissions.")));
-            return true;
-        }
-
-        if (args.length < 3) {
-            sender.sendMessage(StringUtils.colorize(plugin.getConfig().getString(
-                            "Messages.Incorrect-Args", "Incorrect args! Try <suggestion>")
-                    .replace("<suggestion>", "/tempmute <player> <duration> <reason>")));
-            return true;
-        }
-
+    public boolean execute(CommandSender sender, Command command, String label, String[] args) {
         OfflinePlayer target = OfflineUtils.getOfflinePlayerIfCached(args[0]);
         if (target == null) {
             sender.sendMessage(StringUtils.colorize(plugin.getConfig().getString(
@@ -65,5 +50,10 @@ public class TempMuteCommand implements CommandExecutor {
                 .replace("<player>", args[0])
                 .replace("<time>", args[1])));
         return true;
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        return execute(sender, command, label, args, "punishments.tempmute", 3, "/tempmute <player> <time> <reason>");
     }
 }
