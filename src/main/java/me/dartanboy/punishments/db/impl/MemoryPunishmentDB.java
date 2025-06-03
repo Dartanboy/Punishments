@@ -56,8 +56,10 @@ public class MemoryPunishmentDB implements PunishmentDB {
     @Override
     public void registerIp(UUID playerUUID, String ip) {
         List<String> ipList = ipMap.getOrDefault(playerUUID, new ArrayList<>());
-        ipList.add(ip);
-        ipMap.put(playerUUID, ipList);
+        if (!ipList.contains(ip)) {
+            ipList.add(ip);
+            ipMap.put(playerUUID, ipList);
+        }
     }
 
     @Override
