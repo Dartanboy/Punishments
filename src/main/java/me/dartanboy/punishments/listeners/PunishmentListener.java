@@ -4,14 +4,12 @@ import me.dartanboy.punishments.Punishments;
 import me.dartanboy.punishments.punishments.Punishment;
 import me.dartanboy.punishments.punishments.PunishmentType;
 import me.dartanboy.punishments.utils.StringUtils;
-import org.bukkit.Bukkit;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.net.InetAddress;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -30,9 +28,12 @@ public class PunishmentListener implements Listener {
         List<Punishment> punishments = plugin.getPunishmentDB().getPunishments(playerUUID);
 
         for (Punishment punishment : punishments) {
-            if ((punishment.getPunishmentType() == PunishmentType.MUTE ||
-                    (punishment.getPunishmentType() == PunishmentType.TEMP_MUTE &&
-                            punishment.getExpiryTime() >= System.currentTimeMillis())) && punishment.isActive()) {
+            if (punishment.getPunishmentType() == PunishmentType.MUTE && punishment.isActive()) {
+                return new MuteResult(true, punishment.getReason(), null);
+            }
+
+            if (punishment.getPunishmentType() == PunishmentType.TEMP_MUTE &&
+                            punishment.getExpiryTime() >= System.currentTimeMillis() && punishment.isActive()) {
                 return new MuteResult(true, punishment.getReason(), new Date(punishment.getExpiryTime()));
             }
         }
@@ -47,10 +48,16 @@ public class PunishmentListener implements Listener {
 
         if (result.muted) {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(StringUtils.colorize(plugin.getConfig().getString(
-                    "Messages.Mute-Display", "You are muted for <reason> until <time>!")
-                    .replace("<reason>", result.reason)
-                    .replace("<time>", result.expiry + "")));
+            if (result.expiry != null) {
+                event.getPlayer().sendMessage(StringUtils.colorize(plugin.getConfig().getString(
+                                "Messages.Temp-Mute-Display", "You are muted for <reason> until <time>!")
+                        .replace("<reason>", result.reason)
+                        .replace("<time>", result.expiry + "")));
+            } else {
+                event.getPlayer().sendMessage(StringUtils.colorize(plugin.getConfig().getString(
+                                "Messages.Mute-Display", "You are muted for <reason>!")
+                        .replace("<reason>", result.reason)));
+            }
         }
     }
 
