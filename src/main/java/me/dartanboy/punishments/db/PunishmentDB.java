@@ -13,7 +13,9 @@ public interface PunishmentDB {
 
     boolean isBanned(String ip);
 
-    void banIp(String ip);
+    String getBanReason(String ip);
+
+    void banIp(String ip, String reason);
 
     void unbanIp(String ip);
 

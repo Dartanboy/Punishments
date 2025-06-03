@@ -13,6 +13,7 @@ public class MemoryPunishmentDB implements PunishmentDB {
     private final Map<UUID, List<Punishment>> punishments = new HashMap<>();
     private final Map<UUID, List<String>> ipMap = new HashMap<>();
     private final List<String> bannedIps = new ArrayList<>();
+    private final HashMap<String, String> ipBanReasons = new HashMap<>();
 
     @Override
     public List<Punishment> getPunishments(UUID playerUUID) {
@@ -32,13 +33,20 @@ public class MemoryPunishmentDB implements PunishmentDB {
     }
 
     @Override
-    public void banIp(String ip) {
+    public String getBanReason(String ip) {
+        return ipBanReasons.getOrDefault(ip, "No Reason Specified");
+    }
+
+    @Override
+    public void banIp(String ip, String reason) {
         bannedIps.add(ip);
+        ipBanReasons.put(ip, reason);
     }
 
     @Override
     public void unbanIp(String ip) {
         bannedIps.remove(ip);
+        ipBanReasons.remove(ip);
     }
 
     @Override

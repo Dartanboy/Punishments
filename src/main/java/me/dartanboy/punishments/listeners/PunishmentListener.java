@@ -67,6 +67,14 @@ public class PunishmentListener implements Listener {
         String playerIp = event.getAddress().getHostAddress();
         plugin.getPunishmentDB().registerIp(uuid, playerIp);
 
+        if (plugin.getPunishmentDB().isBanned(playerIp)) {
+            event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
+            event.setKickMessage(StringUtils.colorize(plugin.getConfig().getString(
+                            "Messages.Ban-Display", "You have been banned for <reason>")
+                    .replace("<reason>", plugin.getPunishmentDB().getBanReason(playerIp))));
+            return;
+        }
+
         List<Punishment> punishments = plugin.getPunishmentDB().getPunishments(uuid);
         for (Punishment punishment : punishments) {
             if (punishment.getPunishmentType() == PunishmentType.BAN && punishment.isActive()) {
@@ -74,8 +82,7 @@ public class PunishmentListener implements Listener {
                 event.setKickMessage(StringUtils.colorize(plugin.getConfig().getString(
                                 "Messages.Ban-Display", "You have been banned for <reason>")
                         .replace("<reason>", punishment.getReason())));
-            }
-            if (punishment.getPunishmentType() == PunishmentType.TEMP_BAN &&
+            } else if (punishment.getPunishmentType() == PunishmentType.TEMP_BAN &&
                             punishment.getExpiryTime() >= System.currentTimeMillis() &&
                             punishment.isActive()
             ) {

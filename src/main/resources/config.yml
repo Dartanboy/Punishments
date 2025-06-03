@@ -15,3 +15,4 @@ Messages:
   Kick-Display: '&cYou have been kicked for &6<reason>'
   No-Permission: '&cInsufficient permissions.'
   Invalid-Duration: '&cInvalid duration! Use formats like 1d, 2h30m, etc.'
+  Error-Occurred: '&cAn error occurred! Check the console for details.'

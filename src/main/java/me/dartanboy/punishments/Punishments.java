@@ -21,6 +21,7 @@ public class Punishments extends JavaPlugin {
         getCommand("mute").setExecutor(new MuteCommand(this));
         getCommand("tempmute").setExecutor(new TempMuteCommand(this));
         getCommand("kick").setExecutor(new KickCommand(this));
+        getCommand("banip").setExecutor(new BanIpCommand(this));
 
         getServer().getPluginManager().registerEvents(new PunishmentListener(this), this);
     }
