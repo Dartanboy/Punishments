@@ -1,3 +1,5 @@
+Settings:
+  Storage: SQLITE
 Messages:
   Incorrect-Args: '&cIncorrect args! Try &a<suggestion>'
   Never-Joined: '&c<player> has never joined before! You cannot punish them!'
@@ -9,6 +11,7 @@ Messages:
   Temp-Ban-Display: '&cYou are temporarily banned until &6<time> &cfor &6<reason>'
   Muted: '&aYou have &6muted &a<player>'
   Mute-Display: '&cYou are muted for &6<reason>'
+  Unmuted: '&aYou have &6unmuted &a<player>'
   Temp-Muted: '&aYou have &6muted &a<player> for <time>'
   Temp-Mute-Display: '&cYou are muted until &6<time> &cfor &6<reason>'
   Kicked: '&aYou have &6kicked &a<player>'
@@ -16,3 +19,8 @@ Messages:
   No-Permission: '&cInsufficient permissions.'
   Invalid-Duration: '&cInvalid duration! Use formats like 1d, 2h30m, etc.'
   Error-Occurred: '&cAn error occurred! Check the console for details.'
+  No-History: '&cNo history found for <player>'
+  Perm-Active-History: '&4Permanent&r'
+  Temp-Active-History: '&cUntil <time>&r'
+  Not-Active-History: '&aInactive&r'
+  Line-History: '&6&l<punishment>: &f<reason> (<active>)'

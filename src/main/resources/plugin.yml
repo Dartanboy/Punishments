@@ -22,3 +22,12 @@ commands:
   banip:
     description: Ban a player and their IP permanently
     usage: /<command>
+  unmute:
+    description: Unmute a permanently muted player or end their temp mute
+    usage: /<command>
+  unban:
+    description: Unban a permanently banned player or end their temp ban
+    usage: /<command>
+  history:
+    description: View punishment history of a player
+    usage: /<command>

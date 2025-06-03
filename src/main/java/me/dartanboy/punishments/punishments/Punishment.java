@@ -20,6 +20,15 @@ public class Punishment {
         this.active = true;
     }
 
+    public Punishment(PunishmentType punishmentType, UUID playerUUID, String reason, long expiryTime, UUID punishmentId) {
+        this.punishmentType = punishmentType;
+        this.playerUUID = playerUUID;
+        this.reason = reason;
+        this.expiryTime = expiryTime;
+        this.punishmentId = punishmentId;
+        this.active = true;
+    }
+
     public PunishmentType getPunishmentType() {
         return punishmentType;
     }
