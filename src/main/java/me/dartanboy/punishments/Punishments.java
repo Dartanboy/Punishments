@@ -20,8 +20,7 @@ public class Punishments extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getConfig().options().copyDefaults(true);
-        saveConfig();
+        saveDefaultConfig();
 
         setupDatabase();
 

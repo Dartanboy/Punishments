@@ -80,8 +80,9 @@ public class PunishmentListener implements Listener {
             if (punishment.getPunishmentType() == PunishmentType.BAN && punishment.isActive()) {
                 event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
                 event.setKickMessage(StringUtils.colorize(plugin.getConfig().getString(
-                                "Messages.Ban-Display", "You have been banned for <reason>")
-                        .replace("<reason>", punishment.getReason())));
+                                "Messages.Temp-Ban-Display", "You have been banned until <time> for <reason>")
+                        .replace("<reason>", punishment.getReason())
+                        .replace("<time>", new Date(punishment.getExpiryTime()) + "")));
             } else if (punishment.getPunishmentType() == PunishmentType.TEMP_BAN &&
                             punishment.getExpiryTime() >= System.currentTimeMillis() &&
                             punishment.isActive()
